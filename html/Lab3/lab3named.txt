@@ -1,0 +1,69 @@
+options {
+    allow-transfer {
+        none;
+    };
+    allow-query {
+        any;
+    };
+    forwarders {
+        192.168.8.2;
+    };
+    recursion yes;
+};
+include "/etc/named.conf.local";
+
+zone "." IN {
+    type hint;
+    file "../var/named/data/named.root";
+};
+zone "comp4632.edu" IN {
+    type master;
+    file "../var/named/data/named.comp4632.edu";
+};
+zone "8.168.192.in-addr.arpa" IN {
+    type master;
+    file "../var/named/data/named.192.168.8";
+};
+
+$TTL 3H
+@ IN SOA ns1.comp4632.edu. info.comp4632.edu. (
+    2019021500  ; Serial
+    30M         ; Refresh
+    10M         ; Retry
+    3D          ; Expire
+    1H          ; Negative Cache TTL
+)
+
+; Name Servers - NS Records
+@                       IN NS    ns1.comp4632.edu.
+
+; Name Servers - A Records
+ns1.comp4632.edu.       IN A     192.168.8.102
+
+; Servers - A Records
+kali.comp4632.edu.      IN A     192.168.8.101
+webserver.comp4632.edu. IN A     192.168.8.102
+win7-pc.comp4632.edu.   IN A     192.168.8.103
+
+; Servers - CNAME Records
+www                     IN CNAME webserver.comp4632.edu.
+ftp                     IN CNAME webserver.comp4632.edu.
+smtp                    IN CNAME webserver.comp4632.edu.
+pop3                    IN CNAME win7-pc.comp4632.edu.
+
+$TTL 3H
+@ IN SOA ns1.comp4632.edu. info.comp4632.edu. (
+    2019021500  ; Serial
+    30M         ; Refresh
+    10M         ; Retry
+    3D          ; Expire
+    1H          ; Negative Cache TTL
+)
+
+; Name Servers - NS Records
+@                       IN NS    ns1.comp4632.edu.
+
+; PTR Records
+101                     IN PTR   kali.comp4632.edu.
+102                     IN PTR   webserver.comp4632.edu.
+103                     IN PTR   win7-pc.comp4632.edu.
